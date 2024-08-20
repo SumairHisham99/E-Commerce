@@ -1,0 +1,32 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=ecommerce
+      - DB_USERNAME=root
+    depends_on:
+      - mysql
+    networks:
+      - e-commerce-network
+    # command: >
+    #   sh -c "dockerize -wait tcp://mysql:3306 -timeout 60s npm start"
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=ecommerce
+      - MYSQL_USER=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=
+    networks:
+      - e-commerce-network
+
+networks:
+  e-commerce-network:
+    driver: bridge
